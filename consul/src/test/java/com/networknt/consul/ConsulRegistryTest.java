@@ -102,16 +102,25 @@ public class ConsulRegistryTest {
         NotifyListener notifyListener = createNewNotifyListener(serviceUrl);
         NotifyListener notifylistener2 = createNewNotifyListener(serviceUrl);
 
+        // subscribe
         registry.doSubscribe(clientUrl, notifyListener);
         registry.doSubscribe(clientUrl2, notifylistener2);
         Assert.assertTrue(containsNotifyListener(serviceUrl, clientUrl, notifyListener));
         Assert.assertTrue(containsNotifyListener(serviceUrl, clientUrl2, notifylistener2));
 
+        // register
         registry.doRegister(serviceUrl);
         registry.doRegister(serviceUrl2);
         registry.doAvailable(null);
         Thread.sleep(sleepTime);
+        
+        // unregister
+        registry.doUnavailable(null);
+        Thread.sleep(sleepTime);
+        Assert.assertFalse(client.isWorking(service1));
+        Assert.assertFalse(client.isWorking(service2));
 
+        // unsubscrib
         registry.doUnsubscribe(clientUrl, notifyListener);
         Assert.assertFalse(containsNotifyListener(serviceUrl, clientUrl, notifyListener));
         Assert.assertTrue(containsNotifyListener(serviceUrl, clientUrl2, notifylistener2));
