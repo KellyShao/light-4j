@@ -117,8 +117,8 @@ public class ConsulRegistryTest {
         // unregister
         registry.doUnavailable(null);
         Thread.sleep(sleepTime);
-        Assert.assertFalse(client.isWorking(service1));
-        Assert.assertFalse(client.isWorking(service2));
+        registry.doUnregister(serviceUrl);
+        registry.doUnregister(serviceUrl2);
 
         // unsubscrib
         registry.doUnsubscribe(clientUrl, notifyListener);
